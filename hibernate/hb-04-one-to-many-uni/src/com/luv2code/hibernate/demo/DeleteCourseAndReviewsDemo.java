@@ -8,7 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class GetCourseAndReviewsDemo {
+public class DeleteCourseAndReviewsDemo {
 
     public static void main(String[] args){
         //create session factory
@@ -33,10 +33,14 @@ public class GetCourseAndReviewsDemo {
             Course tempCourse = session.get(Course.class, theId);
 
             //print the course
+            System.out.println("Deleting the course...");
             System.out.println(tempCourse);
 
             //print the course reviews
             System.out.println(tempCourse.getReviews());
+
+            //delete the course and then deletes the reviews
+            session.delete(tempCourse);
 
             //commit transaction
             session.getTransaction().commit();

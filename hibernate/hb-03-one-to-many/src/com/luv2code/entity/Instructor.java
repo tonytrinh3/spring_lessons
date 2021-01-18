@@ -1,6 +1,8 @@
 package com.luv2code.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="instructor")
@@ -38,6 +40,9 @@ public class Instructor {
     @JoinColumn(name="instructor_detail_id") // you defined in your mySQL when you created the two tables on how the instructor table is
     //connected to the instructor_detail table via instructor_detail_id
     private InstructorDetail instructorDetail;
+
+    @OneToMany(mappedBy = "instructor", cascade = {CascadeType.PERSIST,CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    private List<Course> courses;
 
     public Instructor(){
 
@@ -98,5 +103,28 @@ public class Instructor {
                 ", email='" + email + '\'' +
                 ", instructorDetail=" + instructorDetail +
                 '}';
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
+
+    //add convenience methods for bi-directional relationship
+
+    public void add(Course tempCourse){
+        if (courses == null){
+            courses = new ArrayList<>();
+        }
+        //https://www.udemy.com/course/spring-hibernate-tutorial/learn/lecture/7744006#questions/12971114
+        //https://www.udemy.com/course/spring-hibernate-tutorial/learn/lecture/7667990#questions/6188200
+//https://www.udemy.com/course/spring-hibernate-tutorial/learn/lecture/5357240#questions/9992724
+        courses.add(tempCourse);
+        //here is to link the course to the instructor
+        //this is pointing back to the Instructor class...
+        tempCourse.setInstructor(this);
     }
 }

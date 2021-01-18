@@ -6,8 +6,9 @@ import com.luv2code.entity.InstructorDetail;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 
-public class EagerLazyDemo {
+public class FetchJoinDemo {
 
     public static void main(String[] args){
         //create session factory
@@ -26,16 +27,25 @@ public class EagerLazyDemo {
             //start a transaction
             session.beginTransaction();
 
+            //option 2: Hibernate query with HQL
+
             //get the instructor from db
             int theId = 1;
-            Instructor tempInstructor = session.get(Instructor.class, theId);
 
+            //join fetch
+            //https://docs.jboss.org/hibernate/orm/5.3/javadocs/org/hibernate/Query.html
+            Query<Instructor> query = session.createQuery("select i from Instructor i JOIN FETCH i.courses where i.id=:theInstructorId", Instructor.class);
+
+            //set parameter on query
+
+            query.setParameter("theInstructorId", theId);
+
+            //execute query and get instructor
+            //load instructor and courses all at once
+            Instructor tempInstructor = query.getSingleResult();
             System.out.println("luv2code: Instructor: " + tempInstructor);
 
-            System.out.println("luv2code: 1Courses: " + tempInstructor.getCourses());
-
-
-            //commit transaction
+            //commit transaction 
             session.getTransaction().commit();
 
             //close the session

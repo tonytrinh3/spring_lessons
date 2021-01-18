@@ -1,6 +1,7 @@
 package com.luv2code.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "student")
@@ -21,6 +22,16 @@ public class Student {
 
     @Column(name = "email")//actual name of column in database
     private String email;
+
+    @ManyToMany(fetch=FetchType.LAZY,
+            cascade = {CascadeType.PERSIST,CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+
+    @JoinTable(
+            name = "course_student",
+            joinColumns = @JoinColumn(name="student_id"), //inverse joincolumns
+            inverseJoinColumns = @JoinColumn(name="course_id")
+    )
+    private List<Course> courses;
 
     //ok here is the default constructor
     public Student(){
@@ -63,6 +74,14 @@ public class Student {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
     }
 
     @Override

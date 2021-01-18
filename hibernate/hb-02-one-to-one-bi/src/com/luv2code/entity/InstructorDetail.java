@@ -30,6 +30,25 @@ public class InstructorDetail {
     @Column(name="hobby")
     private String hobby;
 
+    //add new field for instructor(also add getter/setters)
+
+    //this is for bidirectional connection
+    //the mappedBy instructorDetail connects to private InstructorDetail in Instructor class
+    //with cascadetype.all - if we delete the instructor detail, it will delete the corresponding instructor too
+//    @OneToOne(mappedBy = "instructorDetail", cascade = {CascadeType.ALL})
+    //NO CASCADE DELETE so when you delete instructor detail, you don't delete the instructor
+    @OneToOne(mappedBy = "instructorDetail", cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+
+    private Instructor instructor;
+
+    public Instructor getInstructor() {
+        return instructor;
+    }
+
+    public void setInstructor(Instructor instructor) {
+        this.instructor = instructor;
+    }
+
     public InstructorDetail(){
         //no R constructor(?)
         //default constructor
@@ -67,7 +86,7 @@ public class InstructorDetail {
     @Override
     public String toString() {
         return "InstructorDetail{" +
-                "id=" + id +
+                "ididid=" + id +
                 ", youtubeChannel='" + youtubeChannel + '\'' +
                 ", hobby='" + hobby + '\'' +
                 '}';

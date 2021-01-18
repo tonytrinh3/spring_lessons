@@ -1,14 +1,11 @@
 package com.luv2code.hibernate.demo;
 
-import com.luv2code.entity.Course;
-import com.luv2code.entity.Instructor;
-import com.luv2code.entity.InstructorDetail;
-import com.luv2code.entity.Review;
+import com.luv2code.entity.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class CreateCourseAndReviewsDemo {
+public class CreateCourseAndStudentsDemo {
 
     public static void main(String[] args){
         //create session factory
@@ -18,6 +15,7 @@ public class CreateCourseAndReviewsDemo {
                 .addAnnotatedClass(InstructorDetail.class)
                 .addAnnotatedClass(Course.class)
                 .addAnnotatedClass(Review.class)
+                .addAnnotatedClass(Student.class)
                 .buildSessionFactory();
         //create session
         Session session = factory.getCurrentSession();
@@ -31,17 +29,23 @@ public class CreateCourseAndReviewsDemo {
             //create a course
             Course tempCourse = new Course ("Pacman - How To Score One Million Points");
 
-            //add some reviews
-            tempCourse.addReview(new Review("Great course ... loved it!"));
-            tempCourse.addReview(new Review("Cool course, job well done"));
-            tempCourse.addReview(new Review("What a dumb course, you are an idiot!"));
+            //save the course
+            System.out.println("\nSaving the course...");
+            session.save(tempCourse);
+            System.out.println("Saved the course: " + tempCourse);
 
-            //save the course .. and leverage the cascade all
-            System.out.println("Saving the course");
-            System.out.println(tempCourse);
-            System.out.println(tempCourse.getReviews());
+            //create the students
+            Student tempStudent1 = new Student("John","Doe","john@luv2code.com");
+            Student tempStudent2 = new Student("Mary","Public","mary@luv2code.com");
+            //add students to the course
+            tempCourse.addStudent(tempStudent1);
+            tempCourse.addStudent(tempStudent2);
 
-            session.save(tempCourse);//it saves all reviews same time bc cascade all
+            //save the students
+            System.out.println("\nSaving students...");
+            session.save(tempStudent1);
+            session.save(tempStudent2);
+            System.out.println("Saved students: " + tempCourse.getStudents());
 
             //commit transaction
             session.getTransaction().commit();

@@ -7,7 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class CreateCoursesDemo {
+public class GetInstructorCoursesDemo {
 
     public static void main(String[] args){
         //create session factory
@@ -30,18 +30,10 @@ public class CreateCoursesDemo {
             int theId = 1;
             Instructor tempInstructor = session.get(Instructor.class, theId);
 
-            //create some courses
-            //what is .map array method for java?
-            Course tempCourse1 = new Course("Air Guitar - The Ultimate Guide");
-            Course tempCourse2 = new Course("The Pinball Masterclass");
+            System.out.println("Instructor: " + tempInstructor);
 
-            //add courses to instructor
-            tempInstructor.add(tempCourse1);
-            tempInstructor.add(tempCourse2);
-
-            //save the courses
-            session.save(tempCourse1);
-            session.save(tempCourse2);
+            //get courses for the instructor
+            System.out.println("Courses: " + tempInstructor.getCourses());
 
             //commit transaction
             session.getTransaction().commit();

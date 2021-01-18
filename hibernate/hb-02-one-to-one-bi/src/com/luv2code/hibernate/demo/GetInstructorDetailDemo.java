@@ -6,7 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class DeleteDemo {
+public class GetInstructorDetailDemo {
 
     public static void main(String[] args){
         //create session factory
@@ -25,28 +25,27 @@ public class DeleteDemo {
             //start a transaction
             session.beginTransaction();
 
-            //get instructor by primary key /id
-            int theId = 1;
-            Instructor tempInstructor = session.get(Instructor.class, theId);
+            //get the instructor detail object
+            int theId = 211;
+            InstructorDetail tempInstructorDetail = session.get(InstructorDetail.class, theId);
 
-            System.out.println("Found instructor: " + tempInstructor);
+            //print the instructor detail
+            System.out.println("tempInstructorDetail: "+ tempInstructorDetail);
 
-            //delete the instructors
-            if(tempInstructor != null){
-                System.out.println("Deleting: " + tempInstructor);
-
-                //Note: will ALSO delete associated "details" object
-                //because of CascadeType.ALL at @OneToOne(cascade = CascadeType.ALL) in Instructor
-
-                session.delete(tempInstructor);
-            }
-
+            //print the associated instructor
+            System.out.println("the associated instructor: "+ tempInstructorDetail.getInstructor());
             //commit transaction
             session.getTransaction().commit();
             System.out.println("Done!");
 
 
-        } finally{
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        }
+
+        finally{
+            //handle connection leak issue
+            session.close();
             factory.close();
         }
 

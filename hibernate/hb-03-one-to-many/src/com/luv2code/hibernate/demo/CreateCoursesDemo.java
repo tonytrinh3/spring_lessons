@@ -7,7 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class CreateInstructorDemo {
+public class CreateCoursesDemo {
 
     public static void main(String[] args){
         //create session factory
@@ -23,24 +23,25 @@ public class CreateInstructorDemo {
         try{
             //use the session object to save java object
 
-            //create the objects
-
-            Instructor tempInstructor = new Instructor("Susan", "Public","susan.public@luv2code.com");
-
-            InstructorDetail tempInstructorDetail = new InstructorDetail("http://www.youtube.com", "Video Games");
-
-
-            //associate the objects
-            tempInstructor.setInstructorDetail(tempInstructorDetail);
-
             //start a transaction
             session.beginTransaction();
 
-            //save the instructor
-            //Note: this will ALSO save the details object
-            //because of CascadeType.ALL
-            System.out.println("Saving instructor: " + tempInstructor);
-            session.save(tempInstructor); //actually save to 2 separate tables
+            //get the instructor from db
+            int theId = 1;
+            Instructor tempInstructor = session.get(Instructor.class, theId);
+
+            //create some courses
+            //what is .map array method for java?
+            Course tempCourse1 = new Course("Air Guitar - The Ultimate Guide");
+            Course tempCourse2 = new Course("The Pinball Masterclass");
+
+            //add courses to instructor
+            tempInstructor.add(tempCourse1);
+            tempInstructor.add(tempCourse2);
+
+            //save the courses
+            session.save(tempCourse1);
+            session.save(tempCourse2);
 
             //commit transaction
             session.getTransaction().commit();

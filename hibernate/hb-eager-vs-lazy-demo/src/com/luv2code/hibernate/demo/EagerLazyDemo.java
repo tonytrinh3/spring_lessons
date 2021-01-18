@@ -7,7 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class GetInstructorCoursesDemo {
+public class EagerLazyDemo {
 
     public static void main(String[] args){
         //create session factory
@@ -30,14 +30,33 @@ public class GetInstructorCoursesDemo {
             int theId = 1;
             Instructor tempInstructor = session.get(Instructor.class, theId);
 
-            System.out.println("Instructor: " + tempInstructor);
+            System.out.println("luv2code: Instructor: " + tempInstructor);
 
-            //get courses for the instructor
-            System.out.println("Courses: " + tempInstructor.getCourses());
+            System.out.println("luv2code: 1Courses: " + tempInstructor.getCourses());
+
 
             //commit transaction
             session.getTransaction().commit();
-            System.out.println("Done!");
+
+            //close the session
+            session.close();
+
+
+            //close the session
+            session.close();
+
+            System.out.println("\nluv2code: The session is now closed!\n");
+
+            //option 1: call getter method while session is open
+
+
+            //get courses for the instructor
+            // executed after session closed but it is using the same data that was loaded before session closed so this was able to work
+            // bc the data was fetched and stored in local cache
+
+            System.out.println("luv2code: 2Courses: " + tempInstructor.getCourses());
+
+            System.out.println("luv2code: Done!");
 
 
         } finally{
